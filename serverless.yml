@@ -12,9 +12,6 @@ provider:
   # stage: dev
   # type: premium  # premium azure functions
 
-  environment: # these will be created as application settings
-    VARIABLE_FOO: 'foo'
-
 plugins: # look for additional plugins in the community plugins repo: https://github.com/serverless/plugins
   - serverless-azure-functions
   - serverless-dotenv-plugin
@@ -37,3 +34,19 @@ functions:
         methods:
           - POST
         route: register/
+  
+  login:
+    handler: src/handler.login
+    events:
+      - http: true
+        methods:
+          - POST
+        route: login/
+
+  verify:
+    handler: src/handler.verify
+    events:
+      - http: true
+        methods:
+          - POST
+        route: verify/

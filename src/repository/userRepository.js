@@ -11,6 +11,14 @@ const addUser = async (username, encryptedPass) => {
     }
     throw error;
   }
+};
+
+const findUserByUsername = async (username) => {
+  return await User.findOne({
+    where: {
+      username
+    }
+  });
 }
 
-module.exports = { addUser };
+module.exports = { addUser, findUserByUsername };

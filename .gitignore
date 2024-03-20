@@ -94,3 +94,8 @@ appsettings.json
 local.settings.json
 
 .env
+
+# functions
+login
+register
+verify

@@ -13,6 +13,7 @@
   ],
   "dependencies": {
     "joi": "^17.12.2",
+    "jsonwebtoken": "^9.0.2",
     "md5": "^2.3.0",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
