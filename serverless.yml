@@ -1,0 +1,38 @@
+service: auth-service
+
+frameworkVersion: '3'
+
+provider:
+  name: azure
+  region: West US 2
+  runtime: nodejs14
+  os: linux
+  # prefix: "sample"  # prefix of generated resource name
+  # subscriptionId: A356AC8C-E310-44F4-BF85-C7F29044AF99
+  # stage: dev
+  # type: premium  # premium azure functions
+
+  environment: # these will be created as application settings
+    VARIABLE_FOO: 'foo'
+
+plugins: # look for additional plugins in the community plugins repo: https://github.com/serverless/plugins
+  - serverless-azure-functions
+
+# you can add packaging information here
+package:
+  patterns:
+    # - '!exclude-me.js'
+    # - '!exclude-me-dir/**'
+    - '!local.settings.json'
+    - '!.vscode/**'
+    # - include-me.js
+    # - include-me-dir/**
+
+functions:
+  register:
+    handler: src/handler.register
+    events:
+      - http: true
+        methods:
+          - POST
+        route: register/
