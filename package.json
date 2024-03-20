@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"No tests yet...\"",
     "start": "func host start",
-    "offline": "sls offline"
+    "offline": "sls offline -a \"--cors *\""
   },
   "keywords": [
     "azure",
