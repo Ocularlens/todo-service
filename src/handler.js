@@ -1,4 +1,4 @@
-const ValidationError = require('./errors/apiError');
+const ApiError = require('./errors/apiError');
 const registerSchema = require('./request/registerSchema');
 const registerService = require('./service/registerService');
 const response = require('./util/response');
@@ -14,8 +14,10 @@ const register = async (context, req) => {
     response(context, { message: "user registered" });
   } catch (error) {
     console.error(error);
-    if (error instanceof ValidationError) {
+    if (error instanceof ApiError) {
       response(context, { errors: error.message }, error.statusCode);
+    } else {
+      response(context, { message: 'Internal Server Error' }, 500);
     }
   }
   context.done();
