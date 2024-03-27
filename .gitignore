@@ -96,6 +96,8 @@ local.settings.json
 .env
 
 # functions
-login
-register
-verify
+addTodo
+getTodos
+updateTodo
+getTodo
+deleteTodo

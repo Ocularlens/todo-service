@@ -1,21 +1,22 @@
 const ApiError = require('./errors/apiError');
-const registerSchema = require('./request/registerSchema');
-const loginSchema = require('./request/loginSchema');
-const registerService = require('./service/registerService');
+const addTodoSchema = require('./request/addTodoSchema');
+const updateTodoSchema = require('./request/updateTodoSchema');
+const addTodoService = require('./service/addTodoService');
+const deleteTodoService = require('./service/deleteTodoService');
+const getTodoService = require('./service/getTodoService');
+const getTodosService = require('./service/getTodosService');
+const updateTodoService = require('./service/updateTodoService');
 const response = require('./util/response');
 const validation = require('./util/validation');
-const loginService = require('./service/loginService');
-const verifyService = require('./service/verifyService');
-const verifySchema = require('./request/verifySchema');
 
-const register = async (context, req) => {
+const addTodo = async (context, req) => {
   try {
-    validation(registerSchema, req.body);
+    validation(addTodoSchema, req.body);
 
-    const { username, password } = req.body;
-    await registerService(username, password);
+    const { text } = req.body;
+    await addTodoService(text);
 
-    response(context, { message: "user registered" });
+    response(context, { message: "todo added" });
   } catch (error) {
     console.error(error);
     if (error instanceof ApiError) {
@@ -25,16 +26,13 @@ const register = async (context, req) => {
     }
   }
   context.done();
-};
+}
 
-const login = async (context, req) => {
+const getTodos = async (context, req) => {
   try {
-    validation(loginSchema, req.body);
+    const todos = await getTodosService();
 
-    const { username, password } = req.body;
-    const token = await loginService(username, password);
-
-    response(context, { message: "successful login", token });
+    response(context, { todos });
   } catch (error) {
     console.error(error);
     if (error instanceof ApiError) {
@@ -44,17 +42,15 @@ const login = async (context, req) => {
     }
   }
   context.done();
-};
+}
 
-
-const verify = async (context, req) => {
+const updateTodo = async (context, req) => {
   try {
-    validation(verifySchema, req.body);
+    validation(updateTodoSchema, req.body);
 
-    const { token } = req.body;
-    await verifyService(token);
+    await updateTodoService(req.params.todoId, req.body);
 
-    response(context, { message: "token verfified" });
+    response(context, { message: 'todo updated' });
   } catch (error) {
     console.error(error);
     if (error instanceof ApiError) {
@@ -64,10 +60,44 @@ const verify = async (context, req) => {
     }
   }
   context.done();
-};
+}
+
+const deleteTodo = async (context, req) => {
+  try {
+    await deleteTodoService(req.params.todoId);
+
+    response(context, { message: 'todo deleted' });
+  } catch (error) {
+    console.error(error);
+    if (error instanceof ApiError) {
+      response(context, { errors: error.message }, error.statusCode);
+    } else {
+      response(context, { message: 'Internal Server Error' }, 500);
+    }
+  }
+  context.done();
+}
+
+const getTodo = async (context, req) => {
+  try {
+    const todo = await getTodoService(req.params.todoId);
+
+    response(context, { todo });
+  } catch (error) {
+    console.error(error);
+    if (error instanceof ApiError) {
+      response(context, { errors: error.message }, error.statusCode);
+    } else {
+      response(context, { message: 'Internal Server Error' }, 500);
+    }
+  }
+  context.done();
+}
 
 module.exports = {
-  register,
-  login,
-  verify
+  addTodo,
+  getTodos,
+  updateTodo,
+  deleteTodo,
+  getTodo
 }

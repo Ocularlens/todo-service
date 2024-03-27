@@ -2,14 +2,15 @@ const { Sequelize, DataTypes } = require('sequelize');
 
 const sequelize = new Sequelize(process.env.DATABASE_URL);
 
-const User = sequelize.define('User', {
+const Todo = sequelize.define('Todo', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
   },
-  username: DataTypes.STRING,
-  password: DataTypes.STRING,
-}, { tableName: 'users' });
+  text: DataTypes.STRING,
+  isDone: DataTypes.BOOLEAN,
+  userId: DataTypes.INTEGER
+}, { tableName: 'todos' });
 
-module.exports = User;
+module.exports = Todo;

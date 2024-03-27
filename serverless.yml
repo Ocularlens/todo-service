@@ -1,4 +1,4 @@
-service: auth-service
+service: todo-service
 
 frameworkVersion: '3'
 
@@ -27,26 +27,42 @@ package:
     # - include-me-dir/**
 
 functions:
-  register:
-    handler: src/handler.register
+  addTodo:
+    handler: src/handler.addTodo
     events:
       - http: true
         methods:
           - POST
-        route: register/
-  
-  login:
-    handler: src/handler.login
-    events:
-      - http: true
-        methods:
-          - POST
-        route: login/
+        route: todos/
 
-  verify:
-    handler: src/handler.verify
+  getTodos:
+    handler: src/handler.getTodos
     events:
       - http: true
         methods:
-          - POST
-        route: verify/
+          - GET
+        route: todos/
+  
+  updateTodo:
+    handler: src/handler.updateTodo
+    events:
+      - http: true
+        methods:
+          - PUT
+        route: todos/{todoId}
+
+  deleteTodo:
+    handler: src/handler.deleteTodo
+    events:
+      - http: true
+        methods:
+          - DELETE
+        route: todos/{todoId}
+
+  getTodo:
+    handler: src/handler.getTodo
+    events:
+      - http: true
+        methods:
+          - GET
+        route: todos/{todoId}
