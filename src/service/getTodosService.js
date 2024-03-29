@@ -1,7 +1,7 @@
 const { findTodos } = require("../repository/todoRepository");
 
-const getTodosService = async () => {
-  return await findTodos();
+const getTodosService = async (userId) => {
+  return await findTodos(userId);
 };
 
 

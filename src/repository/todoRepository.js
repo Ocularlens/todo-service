@@ -1,30 +1,36 @@
 const ApiError = require('../errors/apiError');
 const Todo = require('../model/todo');
 
-const addTodo = async (text) => {
-  const todo = new Todo({ text, isDone: false });
+const addTodo = async (text, userId) => {
+  const todo = new Todo({ text, isDone: false, userId });
   await todo.save();
   return todo;
 };
 
-const findTodos = async () => {
-  return await Todo.findAll();
+const findTodos = async (userId) => {
+  return await Todo.findAll({
+    where: { userId }
+  });
 };
 
-const findTodo = async (id) => {
-  return await Todo.findByPk(id);
+const findTodo = async (id, userId) => {
+  return await Todo.findOne({
+    where: {
+      id, userId
+    }
+  });
 }
 
-const updateTodo = async (id, updatedData) => {
-  const todo = await findTodo(id)
+const updateTodo = async (id, updatedData, userId) => {
+  const todo = await findTodo(id, userId)
 
   if (!todo) { throw new ApiError('Todo not found', 404) };
 
   await todo.update(updatedData);
 };
 
-const deleteTodo = async (id) => {
-  const todo = await findTodo(id)
+const deleteTodo = async (id, userId) => {
+  const todo = await findTodo(id, userId)
 
   if (!todo) { throw new ApiError('Todo not found', 404) };
 

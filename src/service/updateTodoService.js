@@ -1,7 +1,7 @@
 const { updateTodo } = require("../repository/todoRepository");
 
-const updateTodoService = async (id, updatedData) => {
-  await updateTodo(id, updatedData);
+const updateTodoService = async (id, updatedData, userId) => {
+  await updateTodo(id, updatedData, userId);
 };
 
 module.exports = updateTodoService;

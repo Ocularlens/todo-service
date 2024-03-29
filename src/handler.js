@@ -1,4 +1,3 @@
-const ApiError = require('./errors/apiError');
 const addTodoSchema = require('./request/addTodoSchema');
 const updateTodoSchema = require('./request/updateTodoSchema');
 const addTodoService = require('./service/addTodoService');
@@ -6,92 +5,53 @@ const deleteTodoService = require('./service/deleteTodoService');
 const getTodoService = require('./service/getTodoService');
 const getTodosService = require('./service/getTodosService');
 const updateTodoService = require('./service/updateTodoService');
+const coreHandler = require('./util/coreHandler');
 const response = require('./util/response');
 const validation = require('./util/validation');
 
 const addTodo = async (context, req) => {
-  try {
+  await coreHandler(context, req, async () => {
     validation(addTodoSchema, req.body);
 
     const { text } = req.body;
-    await addTodoService(text);
+    await addTodoService(text, req.userId);
 
     response(context, { message: "todo added" });
-  } catch (error) {
-    console.error(error);
-    if (error instanceof ApiError) {
-      response(context, { errors: error.message }, error.statusCode);
-    } else {
-      response(context, { message: 'Internal Server Error' }, 500);
-    }
-  }
-  context.done();
+  });
 }
 
 const getTodos = async (context, req) => {
-  try {
-    const todos = await getTodosService();
+  await coreHandler(context, req, async () => {
+    const todos = await getTodosService(req.userId);
 
     response(context, { todos });
-  } catch (error) {
-    console.error(error);
-    if (error instanceof ApiError) {
-      response(context, { errors: error.message }, error.statusCode);
-    } else {
-      response(context, { message: 'Internal Server Error' }, 500);
-    }
-  }
-  context.done();
+  });
 }
 
 const updateTodo = async (context, req) => {
-  try {
+  await coreHandler(context, req, async () => {
     validation(updateTodoSchema, req.body);
 
-    await updateTodoService(req.params.todoId, req.body);
+    await updateTodoService(req.params.todoId, req.body, req.userId);
 
     response(context, { message: 'todo updated' });
-  } catch (error) {
-    console.error(error);
-    if (error instanceof ApiError) {
-      response(context, { errors: error.message }, error.statusCode);
-    } else {
-      response(context, { message: 'Internal Server Error' }, 500);
-    }
-  }
-  context.done();
+  });
 }
 
 const deleteTodo = async (context, req) => {
-  try {
-    await deleteTodoService(req.params.todoId);
+  await coreHandler(context, req, async () => {
+    await deleteTodoService(req.params.todoId, req.userId);
 
     response(context, { message: 'todo deleted' });
-  } catch (error) {
-    console.error(error);
-    if (error instanceof ApiError) {
-      response(context, { errors: error.message }, error.statusCode);
-    } else {
-      response(context, { message: 'Internal Server Error' }, 500);
-    }
-  }
-  context.done();
+  });
 }
 
 const getTodo = async (context, req) => {
-  try {
-    const todo = await getTodoService(req.params.todoId);
+  await coreHandler(context, req, async () => {
+    const todo = await getTodoService(req.params.todoId, req.userId);
 
     response(context, { todo });
-  } catch (error) {
-    console.error(error);
-    if (error instanceof ApiError) {
-      response(context, { errors: error.message }, error.statusCode);
-    } else {
-      response(context, { message: 'Internal Server Error' }, 500);
-    }
-  }
-  context.done();
+  });
 }
 
 module.exports = {
